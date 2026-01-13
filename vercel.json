@@ -9,6 +9,10 @@
       "destination": "https://aura-sis.vercel.app/api/:path*"
     },
     {
+      "source": "/go/:path*",
+      "destination": "https://aura-sis.vercel.app/go/:path*"
+    },
+    {
       "source": "/aura/:path*",
       "destination": "https://aura-sis.vercel.app/aura/:path*"
     }
