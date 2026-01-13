@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/_next/:path*",
+      "destination": "https://aura-sis.vercel.app/_next/:path*"
+    },
+    {
       "source": "/aura/:path*",
       "destination": "https://aura-sis.vercel.app/aura/:path*"
     }
