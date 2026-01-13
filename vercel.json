@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/aura/:path*",
+      "destination": "https://aura-sis.vercel.app/aura/:path*"
+    }
+  ]
+}
