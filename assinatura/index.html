@@ -1,61 +1,61 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Assinatura Ivi MK</title>
 
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #fef3c7;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      background:#fef3c7;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
     }
 
     .card {
-      background: #fff;
-      padding: 30px;
-      border-radius: 16px;
-      width: 360px;
-      text-align: center;
-      border: 2px solid #f59e0b;
+      background:#fff;
+      padding:30px;
+      border-radius:16px;
+      width:360px;
+      text-align:center;
+      border:2px solid #f59e0b;
     }
 
     input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 20px;
-      border: 1px solid #ccc;
-      margin-bottom: 12px;
+      width:100%;
+      padding:12px;
+      border-radius:20px;
+      border:1px solid #ccc;
+      margin-bottom:12px;
     }
 
     button {
-      width: 100%;
-      padding: 12px;
-      border-radius: 20px;
-      border: none;
-      font-weight: bold;
-      color: #fff;
-      cursor: pointer;
+      width:100%;
+      padding:12px;
+      border-radius:20px;
+      border:none;
+      font-weight:bold;
+      color:#fff;
+      cursor:pointer;
     }
 
     #validate {
-      background: #f97316;
+      background:#f97316;
     }
 
     #access {
-      background: #22c55e;
-      margin-top: 12px;
-      opacity: 0.5;
-      cursor: not-allowed;
+      background:#22c55e;
+      margin-top:12px;
+      opacity:0.5;
+      cursor:not-allowed;
     }
 
     #msg {
-      margin-top: 10px;
-      min-height: 20px;
+      margin-top:10px;
+      min-height:20px;
     }
   </style>
 </head>
@@ -64,17 +64,13 @@
   <div class="card">
     <h2>Assinatura Ivi MK</h2>
 
-    <input
-      id="email"
-      type="email"
-      placeholder="seuemail@exemplo.com"
-      autocomplete="email"
-    />
+    <input id="email" type="email" placeholder="seuemail@exemplo.com">
 
     <button id="validate">Validar acesso</button>
 
     <p id="msg"></p>
 
+    <!-- BOTÃO SEMPRE EXISTE -->
     <button id="access" disabled>
       👉 Acessar Ivi MK
     </button>
@@ -99,7 +95,7 @@
     const emailInput = document.getElementById("email");
 
     // ===============================
-    // FUNÇÕES AUXILIARES
+    // FUNÇÕES DE UI
     // ===============================
     function bloquearAcesso(mensagem) {
       msg.innerText = mensagem || "Não autorizado.";
@@ -141,7 +137,7 @@
           bloquearAcesso(data.message);
         }
       } catch (error) {
-        bloquearAcesso("Erro ao validar acesso. Tente novamente.");
+        bloquearAcesso("Erro ao validar acesso.");
       }
     });
 
