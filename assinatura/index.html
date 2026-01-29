@@ -1,154 +1,75 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Assinatura Ivi MK</title>
+<script>
+  // 🔗 URL do Apps Script da assinatura do IAGO
+  const SCRIPT_URL_ASSINATURA =
+    "https://script.google.com/macros/s/AKfycbwvjGD1CUThtKdEfwVzszUxHgBBikGfzP3uMsMxYfmzYon7haWS1Z43_dKtxr2EN3-g/exec";
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background:#fef3c7;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      min-height:100vh;
+  // 🔗 Link do IAGO (versão assinantes)
+  const IAGO_ASSINATURA_URL =
+    "https://chatgpt.com/g/g-692f7cea2ad881919bc1787dcff00a65-iago-mentor-empresarial";
+
+  const form = document.getElementById("access-form");
+  const emailInput = document.getElementById("email");
+  const msgEl = document.getElementById("message");
+  const btn = document.getElementById("submit-btn");
+
+  function setLoading(isLoading) {
+    btn.disabled = isLoading;
+    btn.innerHTML = isLoading
+      ? '<span class="loader"></span>Verificando...'
+      : "Entrar";
+  }
+
+  function showError(message) {
+    msgEl.textContent =
+      message ||
+      "Este e-mail ainda não está autorizado na assinatura. Verifique se digitou corretamente ou aguarde a confirmação do pagamento.";
+    msgEl.className = "msg error";
+  }
+
+  function showSuccess(message) {
+    msgEl.textContent = message;
+    msgEl.className = "msg success";
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = emailInput.value.trim().toLowerCase();
+
+    if (!email) {
+      showError("Por favor, preencha o e-mail.");
+      return;
     }
 
-    .card {
-      background:#fff;
-      padding:30px;
-      border-radius:16px;
-      width:360px;
-      text-align:center;
-      border:2px solid #f59e0b;
-    }
+    setLoading(true);
+    msgEl.textContent = "";
+    msgEl.className = "msg";
 
-    input {
-      width:100%;
-      padding:12px;
-      border-radius:20px;
-      border:1px solid #ccc;
-      margin-bottom:12px;
-    }
+    try {
+      const res = await fetch(
+        `${SCRIPT_URL_ASSINATURA}?email=${encodeURIComponent(email)}`,
+        { method: "GET" }
+      );
 
-    button {
-      width:100%;
-      padding:12px;
-      border-radius:20px;
-      border:none;
-      font-weight:bold;
-      color:#fff;
-      cursor:pointer;
-    }
-
-    #validate {
-      background:#f97316;
-    }
-
-    #access {
-      background:#22c55e;
-      margin-top:12px;
-      opacity:0.5;
-      cursor:not-allowed;
-    }
-
-    #msg {
-      margin-top:10px;
-      min-height:20px;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="card">
-    <h2>Assinatura Ivi MK</h2>
-
-    <input id="email" type="email" placeholder="seuemail@exemplo.com">
-
-    <button id="validate">Validar acesso</button>
-
-    <p id="msg"></p>
-
-    <!-- BOTÃO SEMPRE EXISTE -->
-    <button id="access" disabled>
-      👉 Acessar Ivi MK
-    </button>
-  </div>
-
-  <script>
-    // ===============================
-    // CONFIGURAÇÕES
-    // ===============================
-    const SCRIPT_URL =
-      "https://script.google.com/macros/s/AKfycbw2WpZo__DLSnGm5dJ8NKHwGu9CPYz_mfhWhP7EUSRjU5LkrLOzYZlx7nfpv8FWiXTh/exec";
-
-    const GPT_URL =
-      "https://chatgpt.com/g/g-6924ec5fa3ec81919f6e0ec34bbe3e4d-iniciadora-virtual-mk";
-
-    // ===============================
-    // ELEMENTOS
-    // ===============================
-    const validateBtn = document.getElementById("validate");
-    const accessBtn = document.getElementById("access");
-    const msg = document.getElementById("msg");
-    const emailInput = document.getElementById("email");
-
-    // ===============================
-    // FUNÇÕES DE UI
-    // ===============================
-    function bloquearAcesso(mensagem) {
-      msg.innerText = mensagem || "Não autorizado.";
-      accessBtn.disabled = true;
-      accessBtn.style.opacity = "0.5";
-      accessBtn.style.cursor = "not-allowed";
-    }
-
-    function liberarAcesso() {
-      msg.innerText = "✅ Acesso liberado!";
-      accessBtn.disabled = false;
-      accessBtn.style.opacity = "1";
-      accessBtn.style.cursor = "pointer";
-    }
-
-    // ===============================
-    // VALIDAÇÃO
-    // ===============================
-    validateBtn.addEventListener("click", async () => {
-      const email = emailInput.value.trim().toLowerCase();
-
-      if (!email) {
-        bloquearAcesso("Digite um e-mail válido.");
-        return;
+      if (!res.ok) {
+        throw new Error("Erro de conexão. Tente novamente.");
       }
 
-      msg.innerText = "Verificando...";
+      const data = await res.json();
 
-      try {
-        const response = await fetch(
-          `${SCRIPT_URL}?email=${encodeURIComponent(email)}`
-        );
-
-        const data = await response.json();
-
-        if (data.authorized === true) {
-          liberarAcesso();
-        } else {
-          bloquearAcesso(data.message);
-        }
-      } catch (error) {
-        bloquearAcesso("Erro ao validar acesso.");
+      // 🔒 VALIDAÇÃO FINAL E ÚNICA
+      if (data && data.authorized === true) {
+        showSuccess("E-mail autorizado! Redirecionando para o IAGO...");
+        setTimeout(() => {
+          window.location.href = IAGO_ASSINATURA_URL;
+        }, 800);
+      } else {
+        showError(data?.message);
       }
-    });
-
-    // ===============================
-    // ACESSO FINAL
-    // ===============================
-    accessBtn.addEventListener("click", () => {
-      if (!accessBtn.disabled) {
-        window.open(GPT_URL, "_blank");
-      }
-    });
-  </script>
-</body>
-</html>
+    } catch (err) {
+      showError(err?.message || объяснение);
+    } finally {
+      setLoading(false);
+    }
+  });
+</script>
