@@ -1023,10 +1023,16 @@
         percentages[type] = Math.round((scores[type] / total) * 100);
       }
 
-      document.getElementById('d-column').style.height = `${percentages.D}%`;
-      document.getElementById('i-column').style.height = `${percentages.I}%`;
-      document.getElementById('s-column').style.height = `${percentages.S}%`;
-      document.getElementById('c-column').style.height = `${percentages.C}%`;
+      const chartMaxPx = 240; // altura máxima do gráfico na tela
+const setBarHeight = (id, pct) => {
+  const px = Math.max(2, Math.round((pct / 100) * chartMaxPx)); // mínimo 2px para sempre aparecer
+  document.getElementById(id).style.height = `${px}px`;
+};
+
+setBarHeight('d-column', percentages.D);
+setBarHeight('i-column', percentages.I);
+setBarHeight('s-column', percentages.S);
+setBarHeight('c-column', percentages.C);
 
       document.getElementById('d-percentage').textContent = `${percentages.D}%`;
       document.getElementById('i-percentage').textContent = `${percentages.I}%`;
@@ -1072,10 +1078,17 @@
         <p><strong>Data e hora do teste:</strong> ${escapeHtml(userData.date)}</p>
       `;
 
-      reportRoot.querySelector('#report-d-column').style.height = `${userData.results.D}%`;
-      reportRoot.querySelector('#report-i-column').style.height = `${userData.results.I}%`;
-      reportRoot.querySelector('#report-s-column').style.height = `${userData.results.S}%`;
-      reportRoot.querySelector('#report-c-column').style.height = `${userData.results.C}%`;
+      const reportChartMaxPx = 250; // o gráfico do relatório tem 250px no CSS
+const setReportBarHeight = (selector, pct) => {
+  const el = reportRoot.querySelector(selector);
+  const px = Math.max(2, Math.round((pct / 100) * reportChartMaxPx));
+  el.style.height = `${px}px`;
+};
+
+setReportBarHeight('#report-d-column', userData.results.D);
+setReportBarHeight('#report-i-column', userData.results.I);
+setReportBarHeight('#report-s-column', userData.results.S);
+setReportBarHeight('#report-c-column', userData.results.C);
 
       reportRoot.querySelector('#report-d-percentage').textContent = `${userData.results.D}%`;
       reportRoot.querySelector('#report-i-percentage').textContent = `${userData.results.I}%`;
